@@ -26,7 +26,7 @@ class Door:
 
     @cron('*/1 * * * *')
     def anoncement(self):
-        r = requests.get('http://sd-36895.dedibox.fr:2222').json()
+        r = requests.get('http://localhost:2222').json()
         last_change = datetime.strptime(r['lastchange'], "%d/%m/%Y %H:%M:%S")
         if (datetime.now() - last_change).seconds < 60:
             if "0" in r['state']:
