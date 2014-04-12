@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 from os import makedirs
 
 import irc3
+from irc3.plugins.command import command
 import requests
 from bs4 import BeautifulSoup
 
@@ -49,7 +50,7 @@ class Urls:
 
         cur.execute('''create table if not exists old
                 (id_old integer primary key,
-                value text
+                value text,
                 dt_inserted datetime,
                 nick text
                 )''')
@@ -62,9 +63,6 @@ class Urls:
         """
         parse and reply url title
         """
-
-        print("plop")
-        print(mask, event, target, data)
         urls = re.findall('(?P<url>http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)', data)
 
         nick = mask.split('!')[0]
@@ -82,12 +80,32 @@ class Urls:
             data = cur.fetchall()
 
             if data:
-                self.old(target, nick, data[0][0])
+                self.displayOld(target, nick, data[0][0])
             else:
                 cur.execute("INSERT INTO url(value, title, nick, dt_inserted) VALUES('%s', '%s', '%s', datetime('now')) ;" % (url, title, nick))
                 self.conn.commit()
             cur.close()
 
-    def old(self, target, nick, dt_inserted):
+    def displayOld(self, target, nick, dt_inserted):
         self.bot.privmsg(target, '%s pfff' % nick)
+        cur = self.conn.cursor()
+        cur.execute("SELECT value FROM old ORDER BY RANDOM() LIMIT 1")
+        data = cur.fetchall()
+        if data:
+            self.bot.privmsg(target, '%s %s %s' % (nick, data[0][0], dt_inserted))
+        cur.close()
+
+    @command
+    def old(self, mask, target, args):
+        """old command
+
+           %%old <add/remove> <message>...
+        """
+        nick = mask.split('!')[0]
+
+        if args['<add/remove>'].lower() == 'add':
+            cur = self.conn.cursor()
+            cur.execute("INSERT INTO old(value, nick, dt_inserted) VALUES('%s', '%s', datetime('now'));" %(' '.join(args['<message>']), nick))
+            self.conn.commit()
+
 # end of file
