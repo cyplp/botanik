@@ -107,6 +107,7 @@ class Urls:
             cur.execute("INSERT INTO old(value, nick, dt_inserted) VALUES('%s', '%s', datetime('now'));" %(str(' '.join(args['<message>'])).replace("'", "''"), nick))
             self.conn.commit()
             return
+
         if args['<add/remove>'].lower() == 'remove':
             cur = self.conn.cursor()
             cur.execute("DELETE FROM old where value= '%s';" %(str(' '.join(args['<message>'])).replace("'", "''") ))
