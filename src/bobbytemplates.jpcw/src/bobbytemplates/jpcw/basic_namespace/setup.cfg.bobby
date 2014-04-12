@@ -1,0 +1,12 @@
+[easy_install]
+
+{{% if pkg_nose %}}
+[nosetests]
+match=^test
+{{% endif %}}
+{{% if pkg_coverage and pkg_nose %}}
+with-coverage=1
+cover-package={{{ pkg_ns }}}.{{{ pkg_project }}}
+cover-min-percentage=100
+cover-erase=1
+{{% endif %}}

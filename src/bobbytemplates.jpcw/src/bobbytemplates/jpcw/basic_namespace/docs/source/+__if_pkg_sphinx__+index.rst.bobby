@@ -1,0 +1,26 @@
+Welcome to {{{ pkg_ns }}}.{{{ pkg_project }}}'s documentation!
+==========================================================================
+
+:Author: {{{ pkg_author_name }}} <{{{ pkg_author_email }}}>
+:Source code: `github.com project <{{{ forgeurl }}}/{{{ dcvs_nick }}}/{{{ pkg_ns }}}.{{{ pkg_project }}}>`_
+:Bug tracker: `github.com issues <{{{ forgeurl }}}/{{{ dcvs_nick }}}/{{{ pkg_ns }}}.{{{ pkg_project }}}/issues>`_
+:License: {{{ pkg_license }}}
+:Generated: |today|
+:Version: |release|
+
+
+.. topic:: Introduction
+
+   {{{ pkg_description }}}
+
+
+.. toctree::
+   :maxdepth: 3
+   
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

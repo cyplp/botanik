@@ -1,0 +1,43 @@
+.. contents::
+
+.. highlight:: bash
+
+Introduction
+============
+
+{{{ pkg_description }}}
+
+
+{{% if pkg_nose %}}
+develop
+---------
+
+::
+    
+    $ python setup.py develop
+    $ easy_install . {{{ pkg_ns }}}.{{{ pkg_project }}}[test]
+    
+    #launch tests
+    $ make test -k
+
+{{% endif %}}
+
+{{% if pkg_travis %}}
+Tests
+=====
+
+{{{ pkg_ns }}}.{{{ pkg_project }}} is continuously 
+
++ tested on Travis |travisstatus|_ 
+
+.. |travisstatus| image:: https://api.travis-ci.org/{{{ dcvs_nick }}}/{{{ pkg_ns }}}.{{{ pkg_project }}}.png?branch=master
+.. _travisstatus:  http://travis-ci.org/{{{ dcvs_nick }}}/{{{ pkg_ns }}}.{{{ pkg_project }}}
+
+{{% endif %}}
+{{% if pkg_coveralls %}}
++ coverage tracked on coveralls.io |coveralls|_.
+
+.. |coveralls| image:: https://coveralls.io/repos/{{{ dcvs_nick }}}/{{{ pkg_ns }}}.{{{ pkg_project }}}/badge.png?branch=master
+.. _coveralls: https://coveralls.io/r/{{{ dcvs_nick }}}/{{{ pkg_ns }}}.{{{ pkg_project }}}
+
+{{% endif %}}

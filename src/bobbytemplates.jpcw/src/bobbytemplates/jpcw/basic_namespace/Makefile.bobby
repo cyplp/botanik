@@ -1,0 +1,13 @@
+{{% if pkg_nose %}}
+test: nosetests flake8
+{{% else %}}
+test: flake8
+{{% endif %}}
+{{% if pkg_nose %}}
+nosetests:
+	@echo "==== Running nosetests ===="
+	@nosetests
+{{% endif %}}
+flake8:
+	@echo "==== Running Flake8 ===="
+	@flake8 src/{{{ pkg_ns }}}/{{{ pkg_project }}} *.py
