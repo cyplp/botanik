@@ -1,2 +1,0 @@
-[run]
-source = src/{{{ pkg_ns }}}/{{{ pkg_project }}}
