@@ -43,7 +43,7 @@ class Urls:
         cur.execute('''create table if not exists tag
                 (id_tag integer primary key,
                 id_url interger,
-                value text
+                value text,
                 dt_inserted datetime,
                 nick text
                 )''')
@@ -113,6 +113,59 @@ class Urls:
             cur.execute("DELETE FROM old where value= '%s';" %(str(' '.join(args['<message>'])).replace("'", "''") ))
             self.conn.commit()
             return
+
+    @command
+    def show(self, mask, target, args):
+        """tag command
+
+           %%show <url>
+        """
+        cur = self.conn.cursor()
+        cur.execute("SELECT id_url FROM url WHERE value='%s'" % args['<url>'])
+        data = cur.fetchall()
+
+        if not data:
+            return
+
+        cur.execute("SELECT value FROM tag WHERE id_url=%d;" % data[0][0])
+
+        data = cur.fetchall()
+
+        tags = ' '.join([tag[0] for tag in data])
+        nick = mask.split('!')[0]
+
+        self.bot.privmsg(target, '%s: %s' % (nick, tags))
+
+    @command
+    def tag(self, mask, target, args):
+        """tag command
+
+           %%tag <add/remove> <url> <tags>...
+        """
+        nick = mask.split('!')[0]
+
+        cur = self.conn.cursor()
+        cur.execute("SELECT id_url FROM url WHERE value='%s'" % args['<url>'])
+        data = cur.fetchall()
+
+        if not data:
+            return
+
+        if args['<add/remove>'].lower() == 'add':
+
+            for tag in args['<tags>']:
+                cur.execute("INSERT INTO tag(id_url, value, nick, dt_inserted) VALUES(%d, '%s', '%s', DATETIME('now'));" % (data[0][0], tag, nick))
+            self.conn.commit()
+            cur.close()
+            return
+
+        if args['<add/remove>'].lower() == 'remove':
+            for tag in args['<tags>']:
+                cur.execute("DELETE FROM tag WHERE id_url=%d AND value='%s';" % (data[0][0], tag))
+            self.conn.commit()
+            cur.close()
+            return
+
 
 
 # end of file
