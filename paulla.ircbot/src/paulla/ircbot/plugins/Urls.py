@@ -87,7 +87,6 @@ class Urls:
             cur.close()
 
     def displayOld(self, target, nick, dt_inserted):
-        self.bot.privmsg(target, '%s pfff' % nick)
         cur = self.conn.cursor()
         cur.execute("SELECT value FROM old ORDER BY RANDOM() LIMIT 1")
         data = cur.fetchall()
@@ -105,7 +104,14 @@ class Urls:
 
         if args['<add/remove>'].lower() == 'add':
             cur = self.conn.cursor()
-            cur.execute("INSERT INTO old(value, nick, dt_inserted) VALUES('%s', '%s', datetime('now'));" %(' '.join(args['<message>']), nick))
+            cur.execute("INSERT INTO old(value, nick, dt_inserted) VALUES('%s', '%s', datetime('now'));" %(str(' '.join(args['<message>'])).replace("'", "''"), nick))
             self.conn.commit()
+            return
+        if args['<add/remove>'].lower() == 'remove':
+            cur = self.conn.cursor()
+            cur.execute("DELETE FROM old where value= '%s';" %(str(' '.join(args['<message>'])).replace("'", "''") ))
+            self.conn.commit()
+            return
+
 
 # end of file
